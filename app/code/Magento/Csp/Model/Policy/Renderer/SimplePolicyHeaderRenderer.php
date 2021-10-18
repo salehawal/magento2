@@ -54,7 +54,7 @@ class SimplePolicyHeaderRenderer implements PolicyRendererInterface
                 ]
             ];
             $value .= ' report-uri ' .$config->getReportUri() .';';
-            $value .= ' report-to '. $reportToData['group'] .';';
+            //$value .= ' report-to '. $reportToData['group'] .';';
             $response->setHeader('Report-To', json_encode($reportToData), true);
         }
         if ($existing = $response->getHeader($header)) {

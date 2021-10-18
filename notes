@@ -1,0 +1,50 @@
+Instalation
+php -f bin/magento setup:install --base-url=http://magento.darelm.io/ --backend-frontname=admin --db-host=localhost --db-name=dev_magento --db-user=root --db-password=root --admin-firstname=Magento --admin-lastname=Admin --admin-email=saleh.awal@gmail.com --admin-user=admin --admin-password=admin123 --language=en_US --currency=USD --timezone=Africa/Cairo --use-rewrites=1 --elasticsearch-host=elasticsearch
+
+| Cache Files Remove
+rm -fr generated/metadata/*
+rm -fr generated/code/*
+rm -fr var/cache/*
+rm -fr var/page_cache/*
+rm -fr var/view_preprocessed/*
+rm -fr pub/static/*
+rm -fr var/tmp/*
+
+| Reset File Permission | Production | Google Server
+sudo find . -type f -exec chown saleh:www-data {} +
+sudo find . -type d -exec chown saleh:www-data {} +
+find generated var pub var -type f -exec chmod 777 {} +
+find generated generated var pub var -type d -exec chmod 777 {} +
+find var generated vendor pub/static pub/media app/etc -type f -exec chmod g+w {} +
+find var generated vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} +
+chmod u+x bin/magento
+chown -R :www-data .
+echo done
+
+| urls
+bin/magento setup:store-config:set --base-url="http://magento.darelm.io/" --base-url-secure="https://magento.darelm.io/" --use-secure=0 --use-secure-admin=0
+bin/magento cache:flush
+
+| Deploy | development
+bin/magento setup:upgrade
+bin/magento setup:di:compile
+bin/magento indexer:reset
+bin/magento indexer:reindex
+bin/magento cache:enable
+bin/magento cache:clean
+bin/magento cache:flush
+echo 'DONE';
+
+| Deploy | production
+bin/magento setup:upgrade
+bin/magento setup:di:compile
+bin/magento indexer:reset
+bin/magento indexer:reindex
+bin/magento setup:static-content:deploy -f
+bin/magento cache:enable
+bin/magento cache:clean
+bin/magento cache:flush
+echo 'DONE';
+
+| run command high memory limit
+php -d memory_limit=5G bin/magento setup:di:compile

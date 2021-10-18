@@ -11,9 +11,11 @@
             <mode>
                 <storefront>
                     <report_only>1</report_only>
+                    <report_uri>http://magento.darelm.io/var/log/ssl_violation_report.log</report_uri>
                 </storefront>
                 <admin>
-                    <report_only>1</report_only>
+                    <report_only>0</report_only>
+                    <report_uri>http://magento.darelm.io/var/log/ssl_violation_report.log</report_uri>
                 </admin>
             </mode>
             <policies>
